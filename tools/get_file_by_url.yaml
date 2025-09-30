@@ -1,0 +1,22 @@
+identity:
+  name: get_file_by_url
+  author: sawyer-shi
+  label:
+    en_US: Get File by URL
+    zh_Hans: 通过URL获取文件
+  description:
+    en_US: Retrieve files from Huawei Cloud OBS by URL
+    zh_Hans: 通过URL从华为云OBS获取文件
+  icon: icon.png
+parameters:
+  - name: file_url
+    type: string
+    required: true
+    label:
+      en_US: File URL
+      zh_Hans: 文件URL
+    human_description:
+      en_US: The URL of the file to retrieve from Huawei Cloud OBS
+      zh_Hans: 要从华为云OBS获取的文件URL
+    llm_description: The URL of the file to retrieve from Huawei Cloud OBS
+    form: llm

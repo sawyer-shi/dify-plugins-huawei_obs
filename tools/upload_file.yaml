@@ -1,0 +1,94 @@
+identity:
+  name: upload_file
+  author: sawyer-shi
+  label:
+    en_US: Upload File
+    zh_Hans: 上传文件
+  description:
+    en_US: Upload files to Huawei Cloud OBS
+    zh_Hans: 上传文件到华为云OBS
+  icon: icon.png
+parameters:
+  - name: file
+    type: file
+    required: true
+    label:
+      en_US: File
+      zh_Hans: 文件
+    human_description:
+      en_US: The file to upload to Huawei Cloud OBS
+      zh_Hans: 要上传到华为云OBS的文件
+    llm_description: The file to upload to Huawei Cloud OBS
+    form: form
+    
+  - name: directory
+    type: string
+    required: false
+    label:
+      en_US: Directory
+      zh_Hans: 目录
+    human_description:
+      en_US: The directory in the bucket to upload the file to
+      zh_Hans: 要上传文件的桶内目录
+    llm_description: The directory in the bucket to upload the file to
+    form: form
+    
+  - name: filename
+    type: string
+    required: false
+    label:
+      en_US: Filename
+      zh_Hans: 文件名
+    human_description:
+      en_US: The filename to use for the uploaded file (without extension)
+      zh_Hans: 上传文件的文件名（不带扩展名）
+    llm_description: The filename to use for the uploaded file (without extension)
+    form: form
+    
+  - name: filename_mode
+    type: select
+    required: false
+    label:
+      en_US: Filename Mode
+      zh_Hans: 文件名模式
+    human_description:
+      en_US: How to generate the filename
+      zh_Hans: 如何生成文件名
+    llm_description: How to generate the filename
+    form: form
+    options:
+      - value: filename
+        label:
+          en_US: Original Filename
+          zh_Hans: 原始文件名
+      - value: filename_timestamp
+        label:
+          en_US: Filename with Timestamp
+          zh_Hans: 带时间戳的文件名
+    default: filename
+    
+  - name: directory_mode
+    type: select
+    required: false
+    label:
+      en_US: Directory Mode
+      zh_Hans: 目录模式
+    human_description:
+      en_US: How to organize the directory structure
+      zh_Hans: 如何组织目录结构
+    llm_description: How to organize the directory structure
+    form: form
+    options:
+      - value: no_subdirectory
+        label:
+          en_US: No Subdirectory
+          zh_Hans: 无子目录
+      - value: yyyy_mm_dd_hierarchy
+        label:
+          en_US: YYYY/MM/DD Hierarchy
+          zh_Hans: 年/月/日层级目录
+      - value: yyyy_mm_dd_combined
+        label:
+          en_US: YYYYMMDD Combined
+          zh_Hans: 年月日组合目录
+    default: no_subdirectory

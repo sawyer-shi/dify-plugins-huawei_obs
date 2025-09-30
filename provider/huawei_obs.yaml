@@ -1,0 +1,69 @@
+identity:
+  author: "sawyer-shi"
+  name: "huawei_obs"
+  label:
+    en_US: "Huawei Cloud OBS"
+    zh_Hans: "华为云OBS对象存储"
+  description:
+    en_US: "For interacting with Huawei Cloud OBS, supporting file upload and file retrieval"
+    zh_Hans: "用于与华为云OBS交互，支持文件上传和文件获取"
+  icon: "icon.png"
+
+tools:
+  - tools/get_file_by_url.yaml
+  - tools/upload_file.yaml
+  - tools/multi_upload_files.yaml
+
+credentials_for_provider:
+  access_key_id:
+    label:
+      en_US: "Access Key ID"
+      zh_Hans: "访问密钥ID"
+    help:
+      en_US: "Your Huawei Cloud Access Key ID"
+      zh_Hans: "您的华为云访问密钥ID"
+    placeholder:
+      en_US: "Your Access Key ID"
+      zh_Hans: "您的访问密钥ID"
+    required: true
+    type: "text-input"
+  secret_access_key:
+    label:
+      en_US: "Secret Access Key"
+      zh_Hans: "秘密访问密钥"
+    help:
+      en_US: "Your Huawei Cloud Secret Access Key"
+      zh_Hans: "您的华为云秘密访问密钥"
+    placeholder:
+      en_US: "Your Secret Access Key"
+      zh_Hans: "您的秘密访问密钥"
+    required: true
+    type: "secret-input"
+  endpoint:
+    label:
+      en_US: "Endpoint"
+      zh_Hans: "终端节点"
+    help:
+      en_US: "The endpoint of your Huawei Cloud OBS service"
+      zh_Hans: "华为云OBS服务的终端节点"
+    placeholder:
+      en_US: "e.g. obs.cn-north-4.myhuaweicloud.com"
+      zh_Hans: "例如：obs.cn-north-4.myhuaweicloud.com"
+    required: true
+    type: "text-input"
+  bucket:
+    label:
+      en_US: "Bucket Name"
+      zh_Hans: "桶名称"
+    help:
+      en_US: "The name of your Huawei Cloud OBS bucket"
+      zh_Hans: "华为云OBS桶的名称"
+    placeholder:
+      en_US: "your-bucket"
+      zh_Hans: "your-bucket"
+    required: true
+    type: "text-input"
+
+extra:
+  python:
+    source: provider/huawei_obs.py

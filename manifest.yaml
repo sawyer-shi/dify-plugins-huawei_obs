@@ -1,0 +1,46 @@
+version: 0.0.1
+type: plugin
+author: sawyer-shi
+name: huawei_obs
+label:
+  en_US: huawei_obs
+  zh_Hans: huawei_obs
+description:
+  en_US: Upload files to Huawei Cloud OBS and return the file URL; Enter the URL of the Huawei Cloud OBS file to return the file itself
+  zh_Hans: 上传文件到华为云OBS并返回文件URL；输入华为云OBS文件的URL以返回文件本身
+icon: icon.png
+resource:
+  memory: 268435456
+  permission:
+    model:
+      enabled: true
+      llm: true
+      text_embedding: false
+      rerank: false
+      tts: false
+      speech2text: false
+      moderation: false
+    endpoint:
+      enabled: true
+    app:
+      enabled: true
+    storage:
+      enabled: true
+      size: 1048576
+plugins:
+  tools:
+    - provider/huawei_obs.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+  minimum_dify_version: null
+created_at: 2025-09-30T17:34:26.1819358+08:00
+privacy: PRIVACY.md
+repo: https://github.com/sawyer-shi/dify-plugins-huawei_obs
+verified: false
