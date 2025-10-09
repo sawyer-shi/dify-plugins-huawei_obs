@@ -55,6 +55,7 @@ class GetFileByUrlTool(Tool):
                 
                 # 获取文件大小
                 file_size = len(file_content)
+                file_size_mb = round(file_size / (1024 * 1024), 2)  # 转换为MB，保留两位小数
                 
                 # 获取文件名
                 file_name = os.path.basename(object_key)
@@ -112,7 +113,7 @@ class GetFileByUrlTool(Tool):
                 # 创建文本消息，显示文件信息
                 yield self.create_text_message(
                     f"File downloaded successfully: {file_name}\n"
-                    f"File size: {file_size} bytes\n"
+                    f"File size: {file_size_mb} MB ({file_size} bytes)\n"
                     f"File type: {file_extension.upper() if file_extension else 'Unknown'}"
                 )
             else:

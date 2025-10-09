@@ -89,7 +89,8 @@ class UploadFileTool(Tool):
                 file_url = f"{endpoint}/{bucket_name}/{object_key}"
                 
                 # 获取文件大小
-                file_size = len(file.getvalue()) if hasattr(file, 'getvalue') else 0
+                file_size = len(file_content) if file_content else 0
+                file_size_mb = round(file_size / (1024 * 1024), 2)  # 转换为MB，保留两位小数
                 
                 # 获取文件类型
                 file_type = get_file_type(file)
@@ -98,7 +99,8 @@ class UploadFileTool(Tool):
                 json_result = {
                     "status": "success",
                     "file_name": os.path.basename(object_key),
-                    "file_size": file_size,
+                    "file_size_bytes": file_size,
+                    "file_size_mb": file_size_mb,
                     "file_type": file_type,
                     "file_url": file_url
                 }
@@ -110,7 +112,7 @@ class UploadFileTool(Tool):
                 yield self.create_text_message(
                     f"File uploaded successfully\n"
                     f"File name: {os.path.basename(object_key)}\n"
-                    f"File size: {file_size} bytes\n"
+                    f"File size: {file_size_mb} MB ({file_size} bytes)\n"
                     f"File type: {file_type}\n"
                     f"File URL: {file_url}"
                 )

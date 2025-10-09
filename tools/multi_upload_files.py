@@ -93,7 +93,8 @@ class MultiUploadFilesTool(Tool):
                         file_url = f"{endpoint}/{bucket_name}/{object_key}"
                         
                         # 获取文件大小
-                        file_size = len(file.getvalue()) if hasattr(file, 'getvalue') else 0
+                        file_size = len(file_content) if file_content else 0
+                        file_size_mb = round(file_size / (1024 * 1024), 2)  # 转换为MB，保留两位小数
                         
                         # 获取文件类型
                         file_type = get_file_type(file)
@@ -102,7 +103,8 @@ class MultiUploadFilesTool(Tool):
                         results.append({
                             "status": "success",
                             "filename": os.path.basename(object_key),
-                            "file_size": file_size,
+                            "file_size_bytes": file_size,
+                            "file_size_mb": file_size_mb,
                             "file_type": file_type,
                             "file_url": file_url
                         })
@@ -146,7 +148,7 @@ class MultiUploadFilesTool(Tool):
                 for result in results:
                     if result["status"] == "success":
                         message += f"- File name: {result['filename']}\n"
-                        message += f"  File size: {result['file_size']} bytes\n"
+                        message += f"  File size: {result['file_size_mb']} MB ({result['file_size_bytes']} bytes)\n"
                         message += f"  File type: {result['file_type']}\n"
                         message += f"  File URL: {result['file_url']}\n"
                 message += "\n"
