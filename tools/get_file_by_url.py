@@ -57,8 +57,8 @@ class GetFileByUrlTool(Tool):
                 file_size = len(file_content)
                 file_size_mb = round(file_size / (1024 * 1024), 2)  # 转换为MB，保留两位小数
                 
-                # 获取文件名
-                file_name = os.path.basename(object_key)
+                # 获取文件名 - 从原始URL中提取，而不是从object_key
+                file_name = os.path.basename(urlparse(file_url).path)
                 
                 # 获取文件扩展名
                 file_extension = os.path.splitext(file_name)[1].lower().lstrip('.')
@@ -101,20 +101,35 @@ class GetFileByUrlTool(Tool):
                     }
                     mime_type = extension_to_mime.get(file_extension, mime_type)
                 
+                # 构建文件元数据，确保包含支持图片显示的所有必要属性
+                file_metadata = {
+                    'filename': file_name,
+                    'content_type': mime_type,
+                    'size': file_size,
+                    'mime_type': mime_type,
+                    'extension': file_extension
+                }
+                
+                # 如果是图片类型，添加特定标志以确保在Dify页面正常显示
+                if mime_type.startswith('image/'):
+                    file_metadata['is_image'] = True
+                    file_metadata['display_as_image'] = True
+                    file_metadata['type'] = 'image'
+                
                 # 创建blob消息
                 yield self.create_blob_message(
                     blob=file_content,
-                    meta={
-                        "mime_type": mime_type,
-                        "file_name": file_name
-                    }
+                    meta=file_metadata
                 )
+                
+                # 创建链接消息，使用原始URL作为文件链接
+                yield self.create_link_message(file_url)
                 
                 # 创建文本消息，显示文件信息
                 yield self.create_text_message(
                     f"File downloaded successfully: {file_name}\n"
                     f"File size: {file_size_mb} MB ({file_size} bytes)\n"
-                    f"File type: {file_extension.upper() if file_extension else 'Unknown'}"
+                    f"File type: {mime_type}"
                 )
             else:
                 raise ToolProviderCredentialValidationError(f"获取文件失败: {resp.message}")
