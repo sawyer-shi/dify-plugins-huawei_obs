@@ -53,13 +53,67 @@ class GetFileByUrlTool(Tool):
                 # 获取文件元数据
                 metadata = resp.body.metadata if hasattr(resp.body, 'metadata') and resp.body.metadata else {}
                 
+                # 获取文件大小
+                file_size = len(file_content)
+                
+                # 获取文件名
+                file_name = os.path.basename(object_key)
+                
+                # 获取文件扩展名
+                file_extension = os.path.splitext(file_name)[1].lower().lstrip('.')
+                
+                # 设置MIME类型
+                mime_type = metadata.get("contenttype", "application/octet-stream")
+                
+                # 根据文件扩展名修正MIME类型
+                if file_extension:
+                    extension_to_mime = {
+                        'png': 'image/png',
+                        'jpg': 'image/jpeg',
+                        'jpeg': 'image/jpeg',
+                        'gif': 'image/gif',
+                        'bmp': 'image/bmp',
+                        'svg': 'image/svg+xml',
+                        'webp': 'image/webp',
+                        'pdf': 'application/pdf',
+                        'txt': 'text/plain',
+                        'json': 'application/json',
+                        'xml': 'application/xml',
+                        'html': 'text/html',
+                        'css': 'text/css',
+                        'js': 'application/javascript',
+                        'zip': 'application/zip',
+                        'rar': 'application/x-rar-compressed',
+                        'doc': 'application/msword',
+                        'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'xls': 'application/vnd.ms-excel',
+                        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'ppt': 'application/vnd.ms-powerpoint',
+                        'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                        'mp3': 'audio/mpeg',
+                        'mp4': 'video/mp4',
+                        'avi': 'video/x-msvideo',
+                        'mov': 'video/quicktime',
+                        'wmv': 'video/x-ms-wmv',
+                        'flv': 'video/x-flv',
+                        'mkv': 'video/x-matroska'
+                    }
+                    mime_type = extension_to_mime.get(file_extension, mime_type)
+                
                 # 创建blob消息
                 yield self.create_blob_message(
                     blob=file_content,
                     meta={
-                        "mime_type": metadata.get("contenttype", "application/octet-stream"),
-                        "file_name": os.path.basename(object_key)
+                        "mime_type": mime_type,
+                        "file_name": file_name
                     }
+                )
+                
+                # 创建文本消息，显示文件信息
+                yield self.create_text_message(
+                    f"File downloaded successfully: {file_name}\n"
+                    f"File size: {file_size} bytes\n"
+                    f"File type: {file_extension.upper() if file_extension else 'Unknown'}"
                 )
             else:
                 raise ToolProviderCredentialValidationError(f"获取文件失败: {resp.message}")

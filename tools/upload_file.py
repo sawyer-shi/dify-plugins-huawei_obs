@@ -75,13 +75,25 @@ class UploadFileTool(Tool):
                 # 获取文件类型
                 file_type = get_file_type(file)
                 
+                # 准备JSON结果
+                json_result = {
+                    "status": "success",
+                    "file_name": os.path.basename(object_key),
+                    "file_size": file_size,
+                    "file_type": file_type,
+                    "file_url": file_url
+                }
+                
+                # 创建JSON消息
+                yield self.create_json_message(json_result)
+                
                 # 创建文本消息
                 yield self.create_text_message(
-                    f"文件上传成功\n"
-                    f"文件名: {os.path.basename(object_key)}\n"
-                    f"文件大小: {file_size} bytes\n"
-                    f"文件类型: {file_type}\n"
-                    f"文件URL: {file_url}"
+                    f"File uploaded successfully\n"
+                    f"File name: {os.path.basename(object_key)}\n"
+                    f"File size: {file_size} bytes\n"
+                    f"File type: {file_type}\n"
+                    f"File URL: {file_url}"
                 )
             else:
                 raise ToolProviderCredentialValidationError(f"文件上传失败: {resp.message}")
@@ -152,6 +164,9 @@ class UploadFileTool(Tool):
         if directory_mode == "no_subdirectory":
             # 不使用子目录
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{filename}"
             else:
                 object_key = filename
@@ -160,6 +175,9 @@ class UploadFileTool(Tool):
             today = datetime.now()
             date_dir = today.strftime("%Y/%m/%d")
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{date_dir}/{filename}"
             else:
                 object_key = f"{date_dir}/{filename}"
@@ -168,12 +186,18 @@ class UploadFileTool(Tool):
             today = datetime.now()
             date_dir = today.strftime("%Y%m%d")
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{date_dir}/{filename}"
             else:
                 object_key = f"{date_dir}/{filename}"
         else:
             # 默认不使用子目录
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{filename}"
             else:
                 object_key = filename

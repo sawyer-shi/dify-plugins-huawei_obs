@@ -106,22 +106,36 @@ class MultiUploadFilesTool(Tool):
             success_count = sum(1 for r in results if r["status"] == "success")
             error_count = len(results) - success_count
             
+            # 准备JSON结果
+            json_result = {
+                "status": "completed",
+                "success_count": success_count,
+                "error_count": error_count,
+                "files": results
+            }
+            
+            # 创建JSON消息
+            yield self.create_json_message(json_result)
+            
             # 构建结果消息
-            message = f"批量上传完成\n"
-            message += f"成功: {success_count} 个文件\n"
-            message += f"失败: {error_count} 个文件\n\n"
+            message = f"Batch upload completed\n"
+            message += f"Success: {success_count} files\n"
+            message += f"Failed: {error_count} files\n\n"
             
             # 添加成功文件详情
             if success_count > 0:
-                message += "成功文件:\n"
+                message += "Successful files:\n"
                 for result in results:
                     if result["status"] == "success":
-                        message += f"- {result['filename']} ({result['file_size']} bytes, {result['file_type']})\n"
+                        message += f"- File name: {result['filename']}\n"
+                        message += f"  File size: {result['file_size']} bytes\n"
+                        message += f"  File type: {result['file_type']}\n"
+                        message += f"  File URL: {result['file_url']}\n"
                 message += "\n"
             
             # 添加失败文件详情
             if error_count > 0:
-                message += "失败文件:\n"
+                message += "Failed files:\n"
                 for result in results:
                     if result["status"] == "error":
                         message += f"- {result['filename']}: {result['error']}\n"
@@ -188,6 +202,9 @@ class MultiUploadFilesTool(Tool):
         if directory_mode == "no_subdirectory":
             # 不使用子目录
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{filename}"
             else:
                 object_key = filename
@@ -196,6 +213,9 @@ class MultiUploadFilesTool(Tool):
             today = datetime.now()
             date_dir = today.strftime("%Y/%m/%d")
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{date_dir}/{filename}"
             else:
                 object_key = f"{date_dir}/{filename}"
@@ -204,12 +224,18 @@ class MultiUploadFilesTool(Tool):
             today = datetime.now()
             date_dir = today.strftime("%Y%m%d")
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{date_dir}/{filename}"
             else:
                 object_key = f"{date_dir}/{filename}"
         else:
             # 默认不使用子目录
             if directory:
+                # 确保目录以/结尾
+                if not directory.endswith('/'):
+                    directory += '/'
                 object_key = f"{directory}{filename}"
             else:
                 object_key = filename
