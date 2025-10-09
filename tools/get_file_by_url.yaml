@@ -2,8 +2,8 @@ identity:
   name: "get_file_by_url"
   author: "sawyer-shi"
   label:
-    en_US: "Get File by OBS URL"
-    zh_Hans: "通过OBS URL获取文件"
+    en_US: "Get File by Huawei Cloud OBS URL"
+    zh_Hans: "通过华为云OBS URL获取文件"
   tags:
     - utilities
     - productivity
