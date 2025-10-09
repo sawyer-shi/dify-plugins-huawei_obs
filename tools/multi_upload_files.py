@@ -63,8 +63,26 @@ class MultiUploadFilesTool(Tool):
                     # 生成文件名
                     object_key = self._generate_object_key(file, directory, filename_mode, directory_mode)
                     
-                    # 上传文件
-                    resp = client.putObject(bucket_name, object_key, file)
+                    # 获取实际文件内容
+                    file_content = None
+                    if hasattr(file, 'read'):
+                        # 如果文件对象有read方法，直接读取内容
+                        file.seek(0)  # 确保从文件开头读取
+                        file_content = file.read()
+                    elif hasattr(file, 'blob'):
+                        # 如果文件对象有blob属性，使用blob作为文件内容
+                        file_content = file.blob
+                    elif hasattr(file, 'value'):
+                        # 如果文件对象有value属性，使用value作为文件内容
+                        file_content = file.value
+                    elif hasattr(file, 'getvalue'):
+                        # 如果文件对象有getvalue方法，使用getvalue获取内容
+                        file_content = file.getvalue()
+                    else:
+                        raise ToolProviderCredentialValidationError("无法获取文件内容")
+                    
+                    # 上传文件内容到OBS
+                    resp = client.putObject(bucket_name, object_key, file_content)
                     
                     if resp.status < 300:
                         # 构建文件URL
