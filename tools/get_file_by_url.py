@@ -51,10 +51,10 @@ class GetFileByUrlTool(Tool):
                 file_content = resp.body.response.read()
                 
                 # 获取文件元数据
-                metadata = resp.body.metadata
+                metadata = resp.body.metadata if hasattr(resp.body, 'metadata') and resp.body.metadata else {}
                 
                 # 创建blob消息
-                return self.create_blob_message(
+                yield self.create_blob_message(
                     blob=file_content,
                     meta={
                         "mime_type": metadata.get("contenttype", "application/octet-stream"),

@@ -127,7 +127,7 @@ class MultiUploadFilesTool(Tool):
                         message += f"- {result['filename']}: {result['error']}\n"
             
             # 创建文本消息
-            return self.create_text_message(message)
+            yield self.create_text_message(message)
                 
         except Exception as e:
             raise ToolProviderCredentialValidationError(f"批量上传失败: {str(e)}")
