@@ -1,22 +1,29 @@
 identity:
-  name: get_file_by_url
-  author: sawyer-shi
+  name: "get_file_by_url"
+  author: "sawyer-shi"
   label:
-    en_US: Get File by URL
-    zh_Hans: 通过URL获取文件
-  description:
-    en_US: Retrieve files from Huawei Cloud OBS by URL
-    zh_Hans: 通过URL从华为云OBS获取文件
-  icon: icon.png
+    en_US: "Get File by OBS URL"
+    zh_Hans: "通过OBS URL获取文件"
+  tags:
+    - utilities
+    - productivity
+description:
+  human:
+    en_US: "Retrieve the content of a file from Huawei Cloud OBS using its URL"
+    zh_Hans: "通过URL获取华为云OBS中的文件内容"
+  llm: "Retrieve the content of a file from Huawei Cloud OBS using its URL"
 parameters:
   - name: file_url
     type: string
     required: true
     label:
-      en_US: File URL
-      zh_Hans: 文件URL
+      en_US: OBS File URL
+      zh_Hans: OBS文件URL
     human_description:
-      en_US: The URL of the file to retrieve from Huawei Cloud OBS
-      zh_Hans: 要从华为云OBS获取的文件URL
-    llm_description: The URL of the file to retrieve from Huawei Cloud OBS
+      en_US: "The URL of the file in Huawei Cloud OBS"
+      zh_Hans: "华为云OBS中文件的URL"
+    llm_description: "The URL of the file in Huawei Cloud OBS"
     form: llm
+extra:
+  python:
+    source: tools/get_file_by_url.py

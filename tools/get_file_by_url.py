@@ -1,7 +1,7 @@
 import os
 from typing import Any, Union
 from urllib.parse import urlparse
-from obs import ObsClient, ObsException
+from obs import ObsClient
 from dify_plugin import Tool
 from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 
@@ -11,7 +11,7 @@ class GetFileByUrlTool(Tool):
     华为云OBS工具类 - 通过URL获取文件
     """
     
-    def _invoke(self, tool_parameters: dict[str, Any]) -> Tool.ToolInvokeMessage:
+    def _invoke(self, tool_parameters: dict[str, Any]) -> Any:
         """
         调用工具获取文件
         
@@ -35,10 +35,12 @@ class GetFileByUrlTool(Tool):
         # 创建OBS客户端
         client = None
         try:
+            endpoint_cfg = self.runtime.credentials.get("endpoint")
+            server = endpoint_cfg if endpoint_cfg and (endpoint_cfg.startswith("http://") or endpoint_cfg.startswith("https://")) else f"https://{endpoint_cfg}" if endpoint_cfg else ""
             client = ObsClient(
                 access_key_id=self.runtime.credentials.get("access_key_id"),
                 secret_access_key=self.runtime.credentials.get("secret_access_key"),
-                server=self.runtime.credentials.get("endpoint")
+                server=server
             )
             
             # 获取文件
@@ -60,10 +62,8 @@ class GetFileByUrlTool(Tool):
                     }
                 )
             else:
-                raise ToolProviderCredentialValidationError(f"获取文件失败: {resp.errorMessage}")
+                raise ToolProviderCredentialValidationError(f"获取文件失败: {resp.message}")
                 
-        except ObsException as e:
-            raise ToolProviderCredentialValidationError(f"OBS操作失败: {e.message}")
         except Exception as e:
             raise ToolProviderCredentialValidationError(f"获取文件失败: {str(e)}")
         finally:
@@ -97,53 +97,47 @@ class GetFileByUrlTool(Tool):
         """
         解析OBS URL获取bucket名称和对象key
         
-        Args:
-            url: OBS文件URL
-            
-        Returns:
-            tuple: (bucket名称, 对象key)
-            
-        Raises:
-            ToolProviderCredentialValidationError: URL解析失败时抛出
+        支持两种URL形式：
+        1) 路径风格：https://obs.cn-xxx.myhuaweicloud.com/<bucket>/<object>
+        2) 虚拟主机风格：https://<bucket>.obs.cn-xxx.myhuaweicloud.com/<object>
         """
         try:
-            # 解析URL
             parsed = urlparse(url)
-            
-            # 获取endpoint
+
             endpoint = self.runtime.credentials.get("endpoint")
             if not endpoint:
                 raise ToolProviderCredentialValidationError("缺少endpoint配置")
-            
-            # 确保endpoint格式正确
+
+            # 统一补充协议
             if not endpoint.startswith("http://") and not endpoint.startswith("https://"):
                 endpoint = f"https://{endpoint}"
-            
-            # 解析endpoint
+
             endpoint_parsed = urlparse(endpoint)
-            endpoint_host = endpoint_parsed.netloc or endpoint_parsed.path
-            
-            # 验证URL是否匹配endpoint
-            if parsed.netloc != endpoint_host:
+            endpoint_host = (endpoint_parsed.netloc or endpoint_parsed.path).lower()
+            url_host = (parsed.netloc or parsed.path).lower()
+
+            bucket_name = ""
+            object_key = ""
+
+            if url_host == endpoint_host:
+                # 路径风格：从路径中解析 bucket 和 object
+                path = parsed.path.lstrip("/")
+                path_parts = path.split("/", 1)
+                if not path_parts or not path_parts[0]:
+                    raise ToolProviderCredentialValidationError("无法从URL中解析bucket名称")
+                bucket_name = path_parts[0]
+                object_key = path_parts[1] if len(path_parts) > 1 else ""
+            elif url_host.endswith("." + endpoint_host):
+                # 虚拟主机风格：主机名前缀为 bucket
+                bucket_name = url_host[: -(len(endpoint_host) + 1)]
+                object_key = parsed.path.lstrip("/")
+            else:
                 raise ToolProviderCredentialValidationError(f"URL与endpoint不匹配: {parsed.netloc} != {endpoint_host}")
-            
-            # 获取路径部分
-            path = parsed.path.lstrip("/")
-            
-            # 获取bucket名称（路径的第一部分）
-            path_parts = path.split("/", 1)
-            if len(path_parts) < 1:
-                raise ToolProviderCredentialValidationError("无法从URL中解析bucket名称")
-            
-            bucket_name = path_parts[0]
-            
-            # 获取对象key（路径的其余部分）
-            object_key = path_parts[1] if len(path_parts) > 1 else ""
-            
+
             if not object_key:
                 raise ToolProviderCredentialValidationError("无法从URL中解析对象key")
-            
+
             return bucket_name, object_key
-            
+
         except Exception as e:
             raise ToolProviderCredentialValidationError(f"URL解析失败: {str(e)}")

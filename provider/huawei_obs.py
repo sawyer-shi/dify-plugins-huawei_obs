@@ -4,15 +4,13 @@ from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 
 try:
     from obs import ObsClient
-    from obs import ObsException
 except ImportError:
     ObsClient = None
-    ObsException = None
 
 
 class HuaweiObsProvider(ToolProvider):
     def _validate_credentials(self, credentials: Dict[str, Any]) -> None:
-        if ObsClient is None or ObsException is None:
+        if ObsClient is None:
             raise ToolProviderCredentialValidationError("华为云OBS SDK未安装，请安装esdk-obs-python包")
         
         try:
@@ -34,37 +32,33 @@ class HuaweiObsProvider(ToolProvider):
                     raise ToolProviderCredentialValidationError("filename不能以空格、/或\\开头")
 
             # 3. 创建OBS客户端
+            endpoint = credentials['endpoint']
+            if not endpoint.startswith(('http://', 'https://')):
+                endpoint = f"https://{endpoint}"
             obs_client = ObsClient(
                 access_key_id=credentials['access_key_id'],
                 secret_access_key=credentials['secret_access_key'],
-                server=credentials['endpoint']
+                server=endpoint
             )
 
             # 4. 进行远程校验，检查bucket是否存在
-            try:
-                obs_client.headBucket(credentials['bucket'])
-            except ObsException as e:
-                if e.status_code == 403:
+            resp = obs_client.headBucket(credentials['bucket'])
+            status = getattr(resp, 'status', None)
+            message = getattr(resp, 'message', '')
+            if status is None:
+                raise ToolProviderCredentialValidationError("OBS验证失败: 无法获取响应状态")
+            if status >= 300:
+                if status == 403:
                     raise ToolProviderCredentialValidationError("无效的Access Key ID或Secret Access Key")
-                elif e.status_code == 404:
+                elif status == 404:
                     raise ToolProviderCredentialValidationError("Bucket不存在")
-                elif e.status_code == 401:
+                elif status == 401:
                     raise ToolProviderCredentialValidationError("拒绝访问，请检查凭据权限")
                 else:
-                    raise ToolProviderCredentialValidationError(f"OBS验证失败: {str(e)}")
+                    raise ToolProviderCredentialValidationError(f"OBS验证失败: {message}")
             
             # 5. 关闭客户端
             obs_client.close()
 
-        except ObsException as e:
-            error_code = e.status_code
-            if error_code == 403:
-                raise ToolProviderCredentialValidationError("无效的Access Key ID或Secret Access Key")
-            elif error_code == 404:
-                raise ToolProviderCredentialValidationError("Bucket不存在")
-            elif error_code == 401:
-                raise ToolProviderCredentialValidationError("拒绝访问，请检查凭据权限")
-            else:
-                raise ToolProviderCredentialValidationError(f"OBS验证失败: {str(e)}")
         except Exception as e:
             raise ToolProviderCredentialValidationError(f"凭据验证发生未知错误: {str(e)}")

@@ -2,7 +2,7 @@ import os
 import time
 from datetime import datetime
 from typing import Any, Union, List
-from obs import ObsClient, ObsException
+from obs import ObsClient
 from dify_plugin import Tool
 from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 from .utils import get_file_extension, get_file_type
@@ -13,7 +13,7 @@ class MultiUploadFilesTool(Tool):
     华为云OBS工具类 - 批量上传文件
     """
     
-    def _invoke(self, tool_parameters: dict[str, Any]) -> Tool.ToolInvokeMessage:
+    def _invoke(self, tool_parameters: dict[str, Any]) -> Any:
         """
         调用工具批量上传文件
         
@@ -92,7 +92,7 @@ class MultiUploadFilesTool(Tool):
                         results.append({
                             "status": "error",
                             "filename": getattr(file, 'filename', 'unknown') or getattr(file, 'name', 'unknown'),
-                            "error": resp.errorMessage
+                            "error": resp.message
                         })
                         
                 except Exception as e:
@@ -129,8 +129,6 @@ class MultiUploadFilesTool(Tool):
             # 创建文本消息
             return self.create_text_message(message)
                 
-        except ObsException as e:
-            raise ToolProviderCredentialValidationError(f"OBS操作失败: {e.message}")
         except Exception as e:
             raise ToolProviderCredentialValidationError(f"批量上传失败: {str(e)}")
         finally:

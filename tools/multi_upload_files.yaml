@@ -1,82 +1,87 @@
 identity:
-  name: multi_upload_files
-  author: sawyer-shi
+  name: "multi_upload_files"
+  author: "sawyer-shi"
   label:
-    en_US: Multi Upload Files
-    zh_Hans: 批量上传文件
-  description:
-    en_US: Upload multiple files to Huawei Cloud OBS at once
-    zh_Hans: 一次性上传多个文件到华为云OBS
-  icon: icon.png
+    en_US: "Upload Multiple Files to Huawei Cloud OBS"
+    zh_Hans: "批量上传文件到华为云OBS"
+  tags:
+    - utilities
+    - productivity
+description:
+  human:
+    en_US: "Upload multiple local files to Huawei Cloud OBS and return the file URLs"
+    zh_Hans: "批量上传本地文件到华为云OBS并返回文件URL数组"
+  llm: "Upload multiple local files to Huawei Cloud OBS and return the file URLs"
 parameters:
   - name: files
     type: files
     required: true
     label:
       en_US: Files
-      zh_Hans: 文件列表
+      zh_Hans: 文件数组
     human_description:
-      en_US: The files to upload to Huawei Cloud OBS (max 10 files)
-      zh_Hans: 要上传到华为云OBS的文件列表（最多10个文件）
-    llm_description: The files to upload to Huawei Cloud OBS (max 10 files)
-    form: form
-    
+      en_US: "The files to upload (maximum 10 files)"
+      zh_Hans: "要上传的文件数组（最多10个文件）"
+    llm_description: "The files to upload, maximum 10 files allowed"
+    form: llm
   - name: directory
     type: string
-    required: false
+    required: true
     label:
       en_US: Directory
-      zh_Hans: 目录
+      zh_Hans: 一级目录（例如：test）
     human_description:
-      en_US: The directory in the bucket to upload the files to
-      zh_Hans: 要上传文件的桶内目录
-    llm_description: The directory in the bucket to upload the files to
-    form: form
-    
+      en_US: "The first-level directory name under the bucket"
+      zh_Hans: "Bucket下的一级目录名称"
+    llm_description: "The first-level directory name under the bucket"
+    form: llm
+  
   - name: filename_mode
     type: select
     required: false
     label:
       en_US: Filename Mode
-      zh_Hans: 文件名模式
+      zh_Hans: 文件名组成
     human_description:
-      en_US: How to generate the filenames
-      zh_Hans: 如何生成文件名
-    llm_description: How to generate the filenames
-    form: form
+      en_US: "The way to compose the filename stored in OBS. 'filename': use the original filename; 'filename_timestamp': use the original filename plus timestamp"
+      zh_Hans: "存储在OBS上的文件名组成方式。'filename'：使用原始文件名；'filename_timestamp'：使用原始文件名加上时间戳"
+    llm_description: "The way to compose the filename stored in OBS"
+    form: llm
     options:
-      - value: filename
-        label:
-          en_US: Original Filename
-          zh_Hans: 原始文件名
-      - value: filename_timestamp
-        label:
-          en_US: Filename with Timestamp
-          zh_Hans: 带时间戳的文件名
-    default: filename
-    
+      - label:
+          en_US: "Filename"
+          zh_Hans: "纯文件名"
+        value: "filename"
+      - label:
+          en_US: "Filename + Timestamp"
+          zh_Hans: "文件名+时间戳数字"
+        value: "filename_timestamp"
+    default: "filename"
   - name: directory_mode
     type: select
     required: false
     label:
-      en_US: Directory Mode
-      zh_Hans: 目录模式
+      en_US: Parent Directory Mode
+      zh_Hans: 文件上级目录结构
     human_description:
-      en_US: How to organize the directory structure
-      zh_Hans: 如何组织目录结构
-    llm_description: How to organize the directory structure
-    form: form
+      en_US: "Directory structure mode for storing files. 'no_subdirectory': store directly in the specified directory; 'yyyy_mm_dd_hierarchy': store in date hierarchy (year/month/day); 'yyyy_mm_dd_combined': store in combined date directory (yyyymmdd)"
+      zh_Hans: "存储文件的目录结构模式。'no_subdirectory'：直接存储在指定目录；'yyyy_mm_dd_hierarchy'：按日期层级存储（年/月/日）；'yyyy_mm_dd_combined'：按合并日期目录存储（年月日）"
+    llm_description: "Directory structure mode for storing files"
+    form: llm
     options:
-      - value: no_subdirectory
-        label:
-          en_US: No Subdirectory
-          zh_Hans: 无子目录
-      - value: yyyy_mm_dd_hierarchy
-        label:
-          en_US: YYYY/MM/DD Hierarchy
-          zh_Hans: 年/月/日层级目录
-      - value: yyyy_mm_dd_combined
-        label:
-          en_US: YYYYMMDD Combined
-          zh_Hans: 年月日组合目录
-    default: no_subdirectory
+      - label:
+          en_US: "No Subdirectory"
+          zh_Hans: "无子目录"
+        value: "no_subdirectory"
+      - label:
+          en_US: "Year/Month/Day Hierarchy"
+          zh_Hans: "年月日层级子目录"
+        value: "yyyy_mm_dd_hierarchy"
+      - label:
+          en_US: "Combined Date Directory"
+          zh_Hans: "年月日一体子目录"
+        value: "yyyy_mm_dd_combined"
+    default: "no_subdirectory"
+extra:
+  python:
+    source: tools/multi_upload_files.py
