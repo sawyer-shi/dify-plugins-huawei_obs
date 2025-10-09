@@ -110,6 +110,21 @@ Dedicated tool for uploading multiple files to Huawei Cloud OBS.
     - `filename`: Use original filename
     - `filename_timestamp`: Use original filename plus timestamp
 
+### Examples
+
+#### Upload File
+<img width="2097" height="972" alt="upload-01" src="https://github.com/user-attachments/assets/1bf79e06-4631-4521-bce5-6533d6337f19" />
+
+#### Batch Upload Files
+<img width="2017" height="814" alt="upload-02" src="https://github.com/user-attachments/assets/cf25735a-187a-448b-b4ef-aa9bddd3dbfb" />
+
+#### Get File by URL
+<img width="2254" height="570" alt="download-01" src="https://github.com/user-attachments/assets/51c7ac37-80f7-4585-9bf7-12eb84bf1ec5" />
+<img width="2155" height="544" alt="download-02" src="https://github.com/user-attachments/assets/0d22a3d5-563d-4068-99ac-d7306545aba2" />
+
+
+
+
 ### Notes
 
 - Ensure your OBS bucket has the correct permissions configured
@@ -231,6 +246,19 @@ Dedicated tool for uploading multiple files to Huawei Cloud OBS.
   - `filename_mode`: 可选的文件名组成模式（默认：`filename`）
     - `filename`: 使用原始文件名
     - `filename_timestamp`: 使用原始文件名加上时间戳
+
+### 样例
+
+#### 文件上传
+<img width="2097" height="972" alt="upload-01" src="https://github.com/user-attachments/assets/1bf79e06-4631-4521-bce5-6533d6337f19" />
+
+#### 文件批量上传
+<img width="2017" height="814" alt="upload-02" src="https://github.com/user-attachments/assets/cf25735a-187a-448b-b4ef-aa9bddd3dbfb" />
+
+#### 文件获取(下载)
+<img width="2254" height="570" alt="download-01" src="https://github.com/user-attachments/assets/51c7ac37-80f7-4585-9bf7-12eb84bf1ec5" />
+<img width="2155" height="544" alt="download-02" src="https://github.com/user-attachments/assets/0d22a3d5-563d-4068-99ac-d7306545aba2" />
+
 
 ### 注意事项
 
