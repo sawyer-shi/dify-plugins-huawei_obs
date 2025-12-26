@@ -9,6 +9,9 @@ description:
   en_US: "Huawei Cloud OBS: supporting file upload, file download, batch upload files, batch download files, and public file download"
   zh_Hans: "华为云OBS: 支持文件上传、文件下载、批量上传文件、批量下载文件、公开文件下载"
 icon: icon.png
+tags:
+  - utilities
+  - productivity
 resource:
   memory: 268435456
   permission:
