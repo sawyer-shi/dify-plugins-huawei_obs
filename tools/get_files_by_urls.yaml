@@ -1,0 +1,29 @@
+identity:
+  name: "get_files_by_urls"
+  author: "sawyer-shi"
+  label:
+    en_US: "Get Multiple Files by Huawei Cloud OBS URLs"
+    zh_Hans: "通过OBS批量获取文件"
+  tags:
+    - utilities
+    - productivity
+description:
+  human:
+    en_US: "Retrieve multiple files from Huawei Cloud OBS using their URLs. Separate multiple URLs with semicolons (;)"
+    zh_Hans: "通过多个URL批量获取华为云OBS中的文件。多个URL之间使用分号(;)分隔"
+  llm: "Retrieve multiple files from Huawei Cloud OBS using their URLs. Separate multiple URLs with semicolons (;)"
+parameters:
+  - name: file_urls
+    type: string
+    required: true
+    label:
+      en_US: OBS File URLs
+      zh_Hans: OBS文件URL列表
+    human_description:
+      en_US: "Multiple URLs of files in Huawei Cloud OBS, separated by semicolons (;). Maximum 10 files at once."
+      zh_Hans: "华为云OBS中文件的多个URL，使用分号(;)分隔。一次最多下载10个文件。"
+    llm_description: "Multiple URLs of files in Huawei Cloud OBS, separated by semicolons (;). Maximum 10 files at once."
+    form: llm
+extra:
+  python:
+    source: tools/get_files_by_urls.py

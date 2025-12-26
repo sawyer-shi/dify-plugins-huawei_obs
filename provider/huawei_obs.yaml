@@ -3,16 +3,18 @@ identity:
   name: "huawei_obs"
   label:
     en_US: "Huawei Cloud OBS"
-    zh_Hans: "华为云OBS对象存储"
+    zh_Hans: "华为云OBS云存储"
   description:
-    en_US: "For interacting with Huawei Cloud OBS, supporting file upload and file retrieval"
-    zh_Hans: "用于与华为云OBS交互，支持文件上传和文件获取"
+    en_US: "Huawei Cloud OBS: supporting file upload, file download, batch upload files, batch download files, and public file download"
+    zh_Hans: "华为云OBS: 支持文件上传、文件下载、批量上传文件、批量下载文件、公开文件下载"
   icon: "icon.png"
 
 tools:
   - tools/get_file_by_url.yaml
   - tools/upload_file.yaml
   - tools/multi_upload_files.yaml
+  - tools/get_files_by_urls.yaml
+  - tools/get_public_file_by_url.yaml
 
 credentials_for_provider:
   access_key_id:

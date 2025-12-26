@@ -1,13 +1,13 @@
-version: 0.0.1
+version: 0.0.2
 type: plugin
 author: sawyer-shi
 name: huawei_obs
 label:
   en_US: Huawei Cloud OBS
-  zh_Hans: 华为云OBS对象存储
+  zh_Hans: 华为云OBS云存储
 description:
-  en_US: Upload files to Huawei Cloud OBS and return the file URL; Enter the URL of the Huawei Cloud OBS file to return the file itself
-  zh_Hans: 用于与华为云OBS交互，支持文件上传和文件获取
+  en_US: "Huawei Cloud OBS: supporting file upload, file download, batch upload files, batch download files, and public file download"
+  zh_Hans: "华为云OBS: 支持文件上传、文件下载、批量上传文件、批量下载文件、公开文件下载"
 icon: icon.png
 resource:
   memory: 268435456
@@ -31,7 +31,7 @@ plugins:
   tools:
     - provider/huawei_obs.yaml
 meta:
-  version: 0.0.1
+  version: 0.0.2
   arch:
     - amd64
     - arm64

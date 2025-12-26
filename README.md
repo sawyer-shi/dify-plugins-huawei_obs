@@ -4,12 +4,13 @@ A powerful Dify plugin providing seamless integration with Huawei Cloud Object S
 
 ### Version Information
 
-- **Current Version**: v0.0.1
-- **Release Date**: 2025-09-30
+- **Current Version**: v0.0.2
+- **Release Date**: 2025-12-27
 - **Compatibility**: Dify Plugin Framework
 - **Python Version**: 3.12
 
 #### Version History
+- **v0.0.2** (2025-12-27): Added batch file download, public file download, and fix bugs
 - **v0.0.1** (2025-09-30): Initial release with file upload and retrieval capabilities, support for multiple directory structures and filename modes
 
 ### Quick Start
@@ -35,6 +36,11 @@ A powerful Dify plugin providing seamless integration with Huawei Cloud Object S
 #### File Retrieval by URL
 - **Direct Content Access**: Retrieve file content directly using OBS URLs
 - **Cross-Region Support**: Works with all Huawei Cloud OBS regions worldwide
+
+#### Batch File Operations
+- **Batch File Upload**: Upload multiple files at once (up to 10 files)
+- **Batch File Download**: Download multiple files using URLs separated by semicolons (;)
+- **Public File Download**: Download publicly accessible files from any platform without API key or authorization
 
 ### Technical Advantages
 
@@ -67,7 +73,7 @@ A powerful Dify plugin providing seamless integration with Huawei Cloud Object S
 
 ### Usage
 
-The plugin provides three powerful tools for interacting with Huawei Cloud OBS:
+The plugin provides five powerful tools for interacting with Huawei Cloud OBS:
 
 #### 1. Upload File to OBS (upload_file)
 
@@ -103,6 +109,18 @@ Dedicated tool for uploading multiple files to Huawei Cloud OBS.
   - `filename_mode`: Optional filename composition mode (default: `filename`)
     - `filename`: Use original filename
     - `filename_timestamp`: Use original filename plus timestamp
+
+#### 4. Get Multiple Files by URLs (get_files_by_urls)
+
+Dedicated tool for retrieving multiple files from Huawei Cloud OBS using URLs.
+- **Parameters**:
+  - `file_urls`: Multiple URLs of files in Huawei Cloud OBS, separated by semicolons (;). Maximum 10 files at once.
+
+#### 5. Get Public File by URL (get_public_file_by_url)
+
+Dedicated tool for downloading publicly accessible files from any platform.
+- **Parameters**:
+  - `file_url`: The URL of a publicly accessible file from any platform (e.g., Huawei Cloud OBS, Aliyun OSS, AWS S3, etc.)
 
 ### Examples
 

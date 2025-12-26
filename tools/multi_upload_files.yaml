@@ -3,7 +3,7 @@ identity:
   author: "sawyer-shi"
   label:
     en_US: "Upload Multiple Files to Huawei Cloud OBS"
-    zh_Hans: "批量上传文件到华为云OBS"
+    zh_Hans: "批量上传文件到OBS"
   tags:
     - utilities
     - productivity

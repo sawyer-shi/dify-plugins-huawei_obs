@@ -1,0 +1,29 @@
+identity:
+  name: "get_public_file_by_url"
+  author: "sawyer-shi"
+  label:
+    en_US: "Get Public File by URL"
+    zh_Hans: "通过URL获取公开文件"
+  tags:
+    - utilities
+    - productivity
+description:
+  human:
+    en_US: "Download public files from any platform using their URL. No API key or authorization required."
+    zh_Hans: "通过URL下载任何平台的公开文件。无需API密钥或授权。"
+  llm: "Download public files from any platform using their URL. No API key or authorization required."
+parameters:
+  - name: file_url
+    type: string
+    required: true
+    label:
+      en_US: Public File URL
+      zh_Hans: 公开文件URL
+    human_description:
+      en_US: "The URL of a publicly accessible file from any platform (e.g., Huawei Cloud OBS, Aliyun OSS, AWS S3, etc.)"
+      zh_Hans: "任何平台可公开访问的文件URL（例如：华为云OBS、阿里云OSS、AWS S3等）"
+    llm_description: "The URL of a publicly accessible file from any platform"
+    form: llm
+extra:
+  python:
+    source: tools/get_public_file_by_url.py

@@ -3,7 +3,7 @@ identity:
   author: "sawyer-shi"
   label:
     en_US: "Upload File to Huawei Cloud OBS"
-    zh_Hans: "上传文件到华为云OBS返回URL"
+    zh_Hans: "上传文件到OBS"
   tags:
     - utilities
     - productivity
